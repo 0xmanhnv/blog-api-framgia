@@ -32,12 +32,13 @@ class RegisterAPI(MethodView):
 					#genarate auth token
 					auth_token = user.encodeAuthToken(user.id)
 					if not (type(auth_token) is str):
-						auth_token = auth_token.decode()
+						if hasattr(auth_token, 'decode'):
+							auth_token = auth_token.decode()
 
 					responseObject	=	{
 						'status': 'success',
 						'message': 'Successfully registered',
-						'access_token': auth_token
+						'access_token': str(auth_token)
 					}
 					return make_response(jsonify(responseObject)), 200
 				except Exception as e:
