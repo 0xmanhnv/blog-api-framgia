@@ -28,6 +28,10 @@ migrate = Migrate(app, db)
 
 cors = CORS(app, resources={r"/api/*": {"origins": "*", "Access-Control-Allow-Origin": "*" }})
 
+@app.route("/")
+def hello():
+	return "hello"
+	
 @app.errorhandler(404)
 def page_not_found(e):
 	res = {
