@@ -30,7 +30,9 @@ class RegisterAPI(MethodView):
 					db.session.commit()
 
 					#genarate auth token
-					auth_token = str(user.encodeAuthToken(user.id).decode("utf-8"))
+					auth_token = user.encodeAuthToken(user.id)
+					if not (type(auth_token) is str):
+						auth_token = auth_token.decode()
 
 					responseObject	=	{
 						'status': 'success',
