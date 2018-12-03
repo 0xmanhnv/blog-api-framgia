@@ -20,7 +20,7 @@ class LoginAPI(MethodView):
 					responseObject ={
 						'status': 'success',
 						'message': 'Successfully logged in.',
-						'access_token': access_token.decode(),
+						'access_token': access_token,
 						'user': user_schema.dump(user).data
 					}
 					return make_response(jsonify(responseObject)), 200
