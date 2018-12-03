@@ -7,16 +7,20 @@ class Post(db.Model):
 	__tablename__ = 'posts'
 	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.String(255), nullable=False)
-	slug = db.Column(db.String(255),unique=True, nullable=False)
 	thumbnail = db.Column(db.String(255), nullable=True)
 	description = db.Column(db.Text(), nullable=True)
 	content = db.Column(db.Text(), nullable=False)
-	status = db.Column(TINYINT(), doc="0. private, 1.public",server_default="1", nullable=False)
-	view_count = db.Column(db.Integer)
+	slug = db.Column(db.String(255),unique=True, nullable=False)
+	# status = db.Column(TINYINT(), doc="0. private, 1.public",server_default="1", nullable=False)
+	status = db.Column(db.Numeric(4, asdecimal=False), doc="0. private, 1.public",server_default="1", nullable=False)
+	# is_featured = db.Column(TINYINT(), doc="0. private, 1.public",server_default="0", nullable=False)
+	is_featured = db.Column(db.Numeric(4, asdecimal=False), doc="0. private, 1.public",server_default="0", nullable=False)
+	view_count = db.Column(db.Integer, server_default="0")
 	category_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
 	user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 	created_at = db.Column(db.TIMESTAMP(), nullable=True, server_default=db.func.now())
 	updated_at = db.Column(db.TIMESTAMP(), nullable=True, server_onupdate=db.func.now())
+	deleted_at = db.Column(db.TIMESTAMP(), nullable=True)
 
 	# funtion 
 	def delete(self):
@@ -41,7 +45,7 @@ class Post(db.Model):
 """
 class PostSchema(ma.ModelSchema):
 	class Meta:
-		fields = ('id','title', 'thumbnail', 'slug', 'description', 'content', 'status', 'user_id', 'category_id', 'view_count')
+		fields = ('id','title', 'thumbnail', 'slug', 'description', 'content', 'status', 'user_id', 'category_id', 'view_count', 'created_at')
 
 posts_schema = PostSchema(many=True)
 post_schema = PostSchema()

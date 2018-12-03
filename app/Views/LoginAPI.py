@@ -1,6 +1,6 @@
 from flask.views import MethodView
 from flask import request, make_response, jsonify
-from app.Models import User
+from app.Models import User, user_schema
 
 class LoginAPI(MethodView):
 	"""
@@ -20,7 +20,8 @@ class LoginAPI(MethodView):
 					responseObject ={
 						'status': 'success',
 						'message': 'Successfully logged in.',
-						'access_token': access_token.decode()
+						'access_token': access_token.decode(),
+						'user': user_schema.dump(user).data
 					}
 					return make_response(jsonify(responseObject)), 200
 			else:

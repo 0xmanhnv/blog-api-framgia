@@ -5,6 +5,7 @@ from flask_marshmallow import Marshmallow
 from flask_bcrypt import Bcrypt
 from flask_migrate import Migrate, MigrateCommand
 from flask_jwt import JWT, jwt_required, current_identity
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
 #load config 
@@ -25,6 +26,7 @@ migrate = Migrate(app, db)
 # from helpers.jwt import authenticate, identity
 # JWT(app, authenticate, identity)
 
+cors = CORS(app, resources={r"/api/*": {"origins": "*", "Access-Control-Allow-Origin": "*" }})
 
 @app.errorhandler(404)
 def page_not_found(e):

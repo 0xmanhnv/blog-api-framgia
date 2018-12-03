@@ -2,18 +2,27 @@ from app import db, bcrypt, app, ma
 import datetime
 import jwt
 from flask_validator import ValidateInteger, ValidateString, ValidateEmail
+from sqlalchemy.dialects.mysql import INTEGER,TINYINT
 
 class User( db.Model):
 	__tablename__ = 'users'
 	id = db.Column(db.Integer, primary_key=True)
 	name = db.Column(db.String(255), nullable=False)
-	password = db.Column(db.String(255), nullable=False)
-	username = db.Column(db.String(120), unique=True, nullable=False)
+	full_name = db.Column(db.String(255), nullable=True)
 	email = db.Column(db.String(255), unique=True, nullable=False)
+	password = db.Column(db.String(255), nullable=False)
+	avatar = db.Column(db.Text(), nullable=True)
+	phone_number = db.Column(db.String(20), unique=True)
+	# status = db.Column(TINYINT(), doc="0. block, 1.active",server_default="1", nullable=False)
+	status = db.Column(db.Numeric(4, asdecimal=False), doc="0. block, 1.active",server_default="1", nullable=False)
+	username = db.Column(db.String(120), unique=True, nullable=False)
 	email_verified_at = db.Column(db.TIMESTAMP(), nullable=True)
 	remember_token = db.Column(db.String(120), nullable=True)
 	created_at = db.Column(db.TIMESTAMP(), nullable=True, server_default=db.func.now())
 	updated_at = db.Column(db.TIMESTAMP(), nullable=True, server_default=db.func.now(), server_onupdate=db.func.now())
+	deleted_at = db.Column(db.TIMESTAMP(), nullable=True)
+	posts = db.relationship('Post', lazy='select',
+        backref=db.backref('author', lazy='joined'))
 
 	def __init__(self,name, email,username, password):
 		self.name = name
