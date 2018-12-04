@@ -15,8 +15,10 @@ class LoginAPI(MethodView):
 			).first()
 
 			if user and user.verifyPassword(post_data.get('password')):
-				access_token = str(user.encodeAuthToken(user.id))
-				print(access_token)
+				access_token = user.encodeAuthToken(user.id)
+				# neu kiem tra co decode thi decode 
+				if hasattr(access_token, 'decode'):
+					access_token = access_token.decode()
 				if access_token:
 					responseObject ={
 						'status': 'success',

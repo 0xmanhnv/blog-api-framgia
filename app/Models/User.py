@@ -28,7 +28,7 @@ class User( db.Model):
 		self.name = name
 		self.email = email
 		self.username = username
-		self.password = bcrypt.generate_password_hash(password, 10)
+		self.password = bcrypt.generate_password_hash(password, 10).decode('utf-8')
 
 	# @classmethod
 	# def __declare_last__(cls):
@@ -37,9 +37,12 @@ class User( db.Model):
 
 	#genarate hash pasword
 	def generatePasswordHash(password):
-		return bcrypt.generate_password_hash(password, 10)
+		return bcrypt.generate_password_hash(password, 10).decode('utf-8')
 	def verifyPassword(self, password):
-		return bcrypt.check_password_hash(self.password, password)
+		myPassword = self.password;
+		if hasattr(myPassword, 'decode'):
+			myPassword = myPassword.decode()
+		return bcrypt.check_password_hash(myPassword, password)
 	# funtion 
 	def delete(self):
 		db.session.delete(self)
